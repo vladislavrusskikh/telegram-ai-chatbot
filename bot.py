@@ -13,7 +13,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Привет! Я AI-бот. Напиши что-нибудь, и я отвечу :)")
+    await update.message.reply_text("Hello! I'm AI-Bot. Write something and i will asnwer :)")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_input = update.message.text
@@ -22,7 +22,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Ты умный AI-бот, отвечай вежливо и понятно."},
+                {"role": "system", "content": "You are smart AI-Bot, answer polite and understandable."},
                 {"role": "user", "content": user_input}
             ]
         )
@@ -33,13 +33,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         answer = response.choices[0].message.content
         await update.message.reply_text(answer)
     except Exception as e:
-        await update.message.reply_text("Ошибка при запросе к OpenAI: " + str(e))
+        await update.message.reply_text("Error when requesting OpenAI: " + str(e))
 
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    print("Бот запущен!")
+    print("Bot start!")
     app.run_polling()
 
 if __name__ == "__main__":
